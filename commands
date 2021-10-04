@@ -9,3 +9,9 @@ docker exec cliUHopperOrg1 peer chaincode invoke -C tsundokchannel -n tsundokuco
 
 
 docker exec cliUHopperOrg1 peer chaincode query -C tsundokchannel -n tsundokuconsent -c '{"Args":["tsundokuconsent:listCompanies"]}'
+
+
+docker exec cliUHopperOrg peer chaincode query -C tsundokchannel -n tsundokuconsent -c '{"function":"ReadAsset","Args":["Asset1"]}'
+docker exec cliUHopperOrg peer chaincode invoke -C tsundokchannel -n tsundokuconsent -o orderer.orderer.u-hopper.com:7050 --peerAddresses peer0.org.u-hopper.com:7051 --peerAddresses peer0.org1.u-hopper.com:7051 -c '{"function":"CreateAsset","Args":["Asset1","blue"]}'
+
+docker exec cliUHopperOrg1 peer chaincode query -C tsundokchannel -n tsundokuconsent -c '{"function":"ReadAsset","Args":["Asset1"]}'

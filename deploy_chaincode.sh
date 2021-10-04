@@ -38,7 +38,7 @@ if $TSL_ENABLE; then
 else
 	
     echo "Packaging the chaincode"
-    docker exec -w /opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode_pkg cliUHopperOrg peer lifecycle chaincode package ${CONTRACT_NAME}.tar.gz --path /opt/gopath/src/mortadella-market --lang golang --label ${CONTRACT_NAME}_${VERSION}
+    docker exec -w /opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode_pkg cliUHopperOrg peer lifecycle chaincode package ${CONTRACT_NAME}.tar.gz --path /opt/gopath/src/tsundoku_chaincode --lang golang --label ${CONTRACT_NAME}_${VERSION}
 
     echo "Installing on peer0 org1"
     docker exec -w /opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode_pkg cliUHopperOrg peer lifecycle chaincode install ${CONTRACT_NAME}.tar.gz
