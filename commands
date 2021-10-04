@@ -1,0 +1,11 @@
+docker exec cliUHopperOrg peer chaincode query -C tsundokchannel -n tsundokuconsent -c '{"Args":["tsundokuconsent:listCompanies"]}'
+docker exec cliUHopperOrg peer chaincode invoke -C tsundokchannel -n tsundokuconsent -o orderer.orderer.u-hopper.com:7050 --peerAddresses peer0.org.u-hopper.com:7051 --peerAddresses peer0.org1.u-hopper.com:7051 -c '{"Args":["tsundokuconsent:createComapany", "1", "Pig Slayer", "1000"]}'
+docker exec cliUHopperOrg1 peer chaincode invoke -C tsundokchannel -n tsundokuconsent -o orderer.orderer.u-hopper.com:7050 --peerAddresses peer0.org.u-hopper.com:7051 --peerAddresses peer0.org1.u-hopper.com:7051 -c '{"Args":["tsundokuconsent:createComapany", "2", "Fat Burner", "0"]}'
+docker exec cliUHopperOrg peer chaincode invoke -C tsundokchannel -n tsundokuconsent -o orderer.orderer.u-hopper.com:7050 --peerAddresses peer0.org.u-hopper.com:7051 --peerAddresses peer0.org1.u-hopper.com:7051 -c '{"Args":["tsundokuconsent:trade", "1", "2", "10"]}'
+
+docker exec cliUHopperOrg peer chaincode invoke -C tsundokchannel -n tsundokuconsent -o orderer.orderer.u-hopper.com:7050 --peerAddresses peer0.org.u-hopper.com:7051 --peerAddresses peer0.org1.u-hopper.com:7051 -c '{"Args":["tsundokuconsent:trade", "1", "2", "1000"]}'
+
+docker exec cliUHopperOrg1 peer chaincode invoke -C tsundokchannel -n tsundokuconsent -o orderer.orderer.u-hopper.com:7050 --peerAddresses peer0.org.u-hopper.com:7051 --peerAddresses peer0.org1.u-hopper.com:7051 -c '{"Args":["tsundokuconsent:trade", "1", "2", "10"]}'
+
+
+docker exec cliUHopperOrg1 peer chaincode query -C tsundokchannel -n tsundokuconsent -c '{"Args":["tsundokuconsent:listCompanies"]}'
