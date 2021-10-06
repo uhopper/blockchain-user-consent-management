@@ -20,10 +20,10 @@ type BlockChainHandler struct {
 func (handler *BlockChainHandler) getConsent(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	userId := params["userId"]
-	log.Printf("Retrieving consent for user [%v]", userId)
+	hashedUserId := utils.HashString(userId)
+	log.Printf("Retrieving consent for user [%v][%v]", userId, hashedUserId)
 
-	// consent := &model.Consent{ID: "asd", UserConsent: true, PrivacyPolicyHash: "fgh", LastUpdate: 12}
-	result, err := handler.contract.EvaluateTransaction("ReadConsent", userId)
+	result, err := handler.contract.EvaluateTransaction("ReadConsent", hashedUserId)
 
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
@@ -39,6 +39,8 @@ func (handler *BlockChainHandler) getConsent(w http.ResponseWriter, r *http.Requ
 		fmt.Fprint(w, "Unable to retrieve the content\n")
 		return
 	}
+
+	consent.ID = userId
 
 	json.NewEncoder(w).Encode(consent)
 }
@@ -57,7 +59,7 @@ func (handler *BlockChainHandler) updateConsent(w http.ResponseWriter, r *http.R
 
 	log.Printf("Update consent for user [%v]", consentRequest.ID)
 
-	_, err = handler.contract.SubmitTransaction("UpdateConsent", consentRequest.ID, strconv.FormatBool(consentRequest.UserConsent), consentRequest.PrivacyPolicyHash)
+	_, err = handler.contract.SubmitTransaction("UpdateConsent", utils.HashString(consentRequest.ID), strconv.FormatBool(consentRequest.UserConsent), consentRequest.PrivacyPolicyHash)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "Failed to Submit transaction: %v\n", err)
