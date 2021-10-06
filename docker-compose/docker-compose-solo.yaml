@@ -236,7 +236,7 @@ services:
     environment: {}
     working_dir: /blockchain
     ports:
-      - 7050:7050
+      - 5000:5000
     volumes:
         - ./../:/blockchain
     networks:

@@ -1,72 +1,89 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
-	"os"
-	"path/filepath"
+	"net/http"
+	"strconv"
+	"tsundoku_blockchain_ws/model"
 	"tsundoku_blockchain_ws/utils"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
+	"github.com/gorilla/mux"
 	"github.com/hyperledger/fabric-sdk-go/pkg/gateway"
 )
 
+type BlockChainHandler struct {
+	contract *gateway.Contract
+}
+
+func (handler *BlockChainHandler) getConsent(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	userId := params["userId"]
+	log.Printf("Retrieving consent for user [%v]", userId)
+
+	// consent := &model.Consent{ID: "asd", UserConsent: true, PrivacyPolicyHash: "fgh", LastUpdate: 12}
+	result, err := handler.contract.EvaluateTransaction("ReadConsent", userId)
+
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprint(w, "Consent for user not found\n")
+		return
+	}
+
+	var consent model.Consent
+	err = json.Unmarshal(result, &consent)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, "Unable to retrieve the content\n")
+		return
+	}
+
+	json.NewEncoder(w).Encode(consent)
+}
+
+func (handler *BlockChainHandler) updateConsent(w http.ResponseWriter, r *http.Request) {
+
+	var consentRequest model.ConsentWritable
+
+	err := json.NewDecoder(r.Body).Decode(&consentRequest)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, "Request body is not a valid json\n")
+		return
+	}
+
+	log.Printf("Update consent for user [%v]", consentRequest.ID)
+
+	_, err = handler.contract.SubmitTransaction("UpdateConsent", consentRequest.ID, strconv.FormatBool(consentRequest.UserConsent), consentRequest.PrivacyPolicyHash)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "Failed to Submit transaction: %v\n", err)
+		log.Printf("Failed to Submit transaction: %v", err)
+		return
+	}
+
+	log.Printf("Updated consent for user [%v]", consentRequest)
+
+	w.WriteHeader(http.StatusAccepted)
+}
+
 func main() {
-	log.Println("============ application-golang starts ============")
 
-	err := os.Setenv("DISCOVERY_AS_LOCALHOST", "false")
-	if err != nil {
-		log.Fatalf("Error setting DISCOVERY_AS_LOCALHOST environemnt variable: %v", err)
-	}
-
-	wallet, err := gateway.NewFileSystemWallet("wallet")
-	if err != nil {
-		log.Fatalf("Failed to create wallet: %v", err)
-	}
-
-	if !wallet.Exists("appUser") {
-		log.Println("Does")
-		err = utils.PopulateWallet(wallet, "../../crypto-config/peerOrganizations/org.u-hopper.com/users/User1@org.u-hopper.com/msp/", "User1@org.u-hopper.com-cert.pem")
-		if err != nil {
-			log.Fatalf("Failed to populate wallet contents: %v", err)
-		}
-	}
-
-	connectionFile := os.Getenv("CONNECTION_FILE")
-
-	if connectionFile == "" {
-		log.Println("using local file")
-		connectionFile = "local-connection-org.yml"
-	}
-
-	ccpPath := filepath.Join(connectionFile)
-
-	gw, err := gateway.Connect(
-		gateway.WithConfig(config.FromFile(filepath.Clean(ccpPath))),
-		gateway.WithIdentity(wallet, "appUser"),
-	)
-	if err != nil {
-		log.Fatalf("Failed to connect to gateway: %v", err)
-	}
-	defer gw.Close()
-
-	network, err := gw.GetNetwork("tsundokchannel")
-	if err != nil {
-		log.Fatalf("Failed to get network: %v", err)
-	}
-
-	contract := network.GetContract("tsundokuconsent")
-	result, err := contract.EvaluateTransaction("ReadConsent", "user11")
+	contract, err := utils.GetContract()
 
 	if err != nil {
-		log.Print(err)
+		log.Fatalf("Unable to connecto to the blockchain: %v", err)
 	}
-	log.Println(result)
 
-	// log.Println("--> Create a consent")
-	// result, err := contract.SubmitTransaction("UpdateConsent", "user11", "true", "asd")
-	// if err != nil {
-	// 	log.Fatalf("Failed to Submit transaction: %v", err)
-	// }
-	// log.Println(string(result))
+	handler := &BlockChainHandler{contract}
+	router := mux.NewRouter()
+	router.HandleFunc("/consent/{userId}", handler.getConsent).Methods("GET")
+	router.HandleFunc("/consent", handler.updateConsent).Methods("POST")
+	http.Handle("/", router)
+	log.Println("Server ready on port 5000")
+	log.Fatal(http.ListenAndServe(":5000", router))
 
 }
