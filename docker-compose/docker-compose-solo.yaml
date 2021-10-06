@@ -229,3 +229,16 @@ services:
         - ./chiancode_pkg/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode_pkg
     networks:
         - basic
+
+  ws:
+    container_name: tsundoku-ws
+    image: golang:latest
+    environment: {}
+    working_dir: /blockchain
+    ports:
+      - 7050:7050
+    volumes:
+        - ./../:/blockchain
+    networks:
+      - basic
+
