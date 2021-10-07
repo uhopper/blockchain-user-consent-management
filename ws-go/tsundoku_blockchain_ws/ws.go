@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"tsundoku_blockchain_ws/model"
 	"tsundoku_blockchain_ws/utils"
@@ -14,10 +15,33 @@ import (
 )
 
 type BlockChainHandler struct {
-	contract *gateway.Contract
+	contract         *gateway.Contract
+	authorizedApikey string
+}
+
+func (handler *BlockChainHandler) checkAuthentication(r *http.Request) error {
+	apikey := r.Header.Get("apikey")
+	if apikey == "" {
+		return fmt.Errorf("Missing ApiKey header")
+	}
+
+	if apikey != handler.authorizedApikey {
+		return fmt.Errorf("Not Authorized")
+	}
+
+	return nil
 }
 
 func (handler *BlockChainHandler) getConsent(w http.ResponseWriter, r *http.Request) {
+
+	authErr := handler.checkAuthentication(r)
+
+	if authErr != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprintf(w, "%v\n", authErr)
+		return
+	}
+
 	params := mux.Vars(r)
 	userId := params["userId"]
 	hashedUserId := utils.HashString(userId)
@@ -47,6 +71,14 @@ func (handler *BlockChainHandler) getConsent(w http.ResponseWriter, r *http.Requ
 
 func (handler *BlockChainHandler) updateConsent(w http.ResponseWriter, r *http.Request) {
 
+	authErr := handler.checkAuthentication(r)
+
+	if authErr != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprintf(w, "%v\n", authErr)
+		return
+	}
+
 	var consentRequest model.ConsentWritable
 
 	err := json.NewDecoder(r.Body).Decode(&consentRequest)
@@ -67,12 +99,18 @@ func (handler *BlockChainHandler) updateConsent(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	log.Printf("Updated consent for user [%v]", consentRequest)
+	log.Printf("Updated consent for user [%v]", consentRequest.ID)
 
 	w.WriteHeader(http.StatusAccepted)
 }
 
 func main() {
+
+	authorizedApikey := os.Getenv("AUTHORIZED_APIKEY")
+
+	if authorizedApikey == "" {
+		log.Fatalln("Missing AUTHORIZED_APIKEY env variable")
+	}
 
 	contract, err := utils.GetContract()
 
@@ -80,7 +118,7 @@ func main() {
 		log.Fatalf("Unable to connecto to the blockchain: %v", err)
 	}
 
-	handler := &BlockChainHandler{contract}
+	handler := &BlockChainHandler{contract: contract, authorizedApikey: authorizedApikey}
 	router := mux.NewRouter()
 	router.HandleFunc("/consent/{userId}", handler.getConsent).Methods("GET")
 	router.HandleFunc("/consent", handler.updateConsent).Methods("POST")
