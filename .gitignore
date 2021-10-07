@@ -3,3 +3,4 @@ config/
 crypto-config/
 data/
 identity/
+log.txt

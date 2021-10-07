@@ -1,0 +1,99 @@
+---
+name: tsundokuconsent
+version: 1.0.0
+client:
+  organization: UHopperOrg
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+
+channels:
+  tsundokchannel:
+    # Required. list of orderers designated by the application to use for transactions on this
+    # channel. This list can be a result of access control ("org1" can only access "ordererA"), or
+    # operational decisions to share loads from applications among the orderers.  The values must
+    # be "names" of orgs defined under "organizations/peers"
+    orderers:
+      - orderer.orderer.u-hopper.com
+
+    # Required. list of peers from participating orgs
+    peers:
+      peer0.org.u-hopper.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+
+      peer0.org1.u-hopper.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+organizations:
+  UHopperOrg:
+    mspid: UHopperOrgMSP
+    peers:
+    - peer0.org.u-hopper.com
+    # certificateAuthorities: []
+  UHopperOrg1:
+    mspid: UHopperOrg1MSP
+    peers:
+    - peer0.org1.u-hopper.com
+    # certificateAuthorities: []
+
+peers:
+  peer0.org.u-hopper.com:
+    url: grpc://peer0.org.u-hopper.com:7051
+    # tlsCACerts:
+    #   pem: |
+    #       -----BEGIN CERTIFICATE-----
+    #       -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer0.org.u-hopper.com
+      hostnameOverride: peer0.org.u-hopper.com
+    
+  peer0.org1.u-hopper.com:
+    url: grpc://peer0.org1.u-hopper.com:7051
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.u-hopper.com
+      hostnameOverride: peer0.org1.u-hopper.com
+# certificateAuthorities:
+#   ca.org1.example.com:
+#     url: https://localhost:7054
+#     caName: ca-org1
+#     tlsCACerts:
+#       pem: 
+#         - |
+#           -----BEGIN CERTIFICATE-----
+#           MIICUjCCAfigAwIBAgIRAJToYWvHaLj88fbaVGt1IhcwCgYIKoZIzj0EAwIwczEL
+#           MAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG
+#           cmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xHDAaBgNVBAMTE2Nh
+#           Lm9yZzEuZXhhbXBsZS5jb20wHhcNMjExMDA1MTA0MDAwWhcNMzExMDAzMTA0MDAw
+#           WjBzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMN
+#           U2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UE
+#           AxMTY2Eub3JnMS5leGFtcGxlLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IA
+#           BMCJv2KR2b5PacPmWayqIJvqQaA2yinn2o5gwDTmn2j4FhFA1CI0deaAH6qvtsNO
+#           jkf7Atk0acD6lCCvrU1PTHujbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAU
+#           BggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQg
+#           EuHY0nD1we1OI6wgfebRb2jusXWOXTmxq2+aLO3Or6YwCgYIKoZIzj0EAwIDSAAw
+#           RQIhAM/qMWxdeBncNAvWjm2ea4dfeat3NgjZF6HcIDl52AZoAiBFWHriRxHSPfE2
+#           c47Zw8wN842Zo87Owb41c2MEj2T3Fg==
+#           -----END CERTIFICATE-----
+          
+#     httpOptions:
+#       verify: false
+
+orderers:
+  orderer.orderer.u-hopper.com:
+    url: grpc://orderer.orderer.u-hopper.com:7050
+
+    # these are standard properties defined by the gRPC library
+    # they will be passed in as-is to gRPC client constructor
+    grpcOptions:
+      ssl-target-name-override: orderer.orderer.u-hopper.com
+      hostnameOverride: orderer.orderer.u-hopper.com
+

@@ -1,0 +1,4 @@
+chiancode_pkg/
+.env
+couch_db_peer0.org0.env
+couch_db_peer0.org1.env

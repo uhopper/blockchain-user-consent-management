@@ -1,0 +1,27 @@
+version: '2'
+
+networks:
+  basic:
+    external:
+      name: tsundoku-${ENV}
+  tsundoku:
+    external: true
+
+services:
+  ws:
+    container_name: tsundoku-ws-${ENV}
+    build:
+      ../ws-go/.
+    environment: 
+      - AUTHORIZED_APIKEY=${AUTHORIZED_APIKEY}
+      - MSP_DIRECTORY=/msp
+      - CONNECTION_CONFIG_FILE=/config/ws-connection-config.yml
+    # ports:
+    #   - 5000:5000
+    volumes:
+        - ./ws-connection-config.yml:/config/ws-connection-config.yml:ro
+        - ../crypto-config/peerOrganizations/org.u-hopper.com/users/User1@org.u-hopper.com/msp/:/msp
+    networks:
+      basic:
+          aliases:
+            - tsundoku-ws-${ENV}

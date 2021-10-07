@@ -7,4 +7,4 @@ then
 fi
 
 
-docker-compose -f docker-compose/docker-compose-solo.yaml --project-name=tsundoku-blockchain-${ENV} down
+docker-compose -f docker-compose/docker-compose-ws.yaml --project-name=tsundoku-blockchain-${ENV}-ws down

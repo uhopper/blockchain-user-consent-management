@@ -8,4 +8,4 @@ then
 fi
 
 docker network create tsundoku-${ENV}
-docker-compose -f docker-compose/docker-compose-solo.yaml --project-name=tsundoku-blockchain-${ENV} up -d
+docker-compose -f docker-compose/docker-compose-ws.yaml --project-name=tsundoku-blockchain-${ENV}-ws up -d
