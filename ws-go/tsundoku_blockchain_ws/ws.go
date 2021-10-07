@@ -107,12 +107,23 @@ func (handler *BlockChainHandler) updateConsent(w http.ResponseWriter, r *http.R
 func main() {
 
 	authorizedApikey := os.Getenv("AUTHORIZED_APIKEY")
+	mspDirectory := os.Getenv("MSP_DIRECTORY")
+	connectionConfigFile := os.Getenv("CONNECTION_CONFIG_FILE")
+
+	if mspDirectory == "" {
+		mspDirectory = "../../crypto-config/peerOrganizations/org.u-hopper.com/users/User1@org.u-hopper.com/msp/"
+	}
+
+	if connectionConfigFile == "" {
+		log.Println("using default connection file")
+		connectionConfigFile = "ws-connection-config.yml"
+	}
 
 	if authorizedApikey == "" {
 		log.Fatalln("Missing AUTHORIZED_APIKEY env variable")
 	}
 
-	contract, err := utils.GetContract()
+	contract, err := utils.GetContract(mspDirectory, connectionConfigFile)
 
 	if err != nil {
 		log.Fatalf("Unable to connecto to the blockchain: %v", err)

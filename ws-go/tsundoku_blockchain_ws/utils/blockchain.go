@@ -10,7 +10,7 @@ import (
 )
 
 // GetContract connect to blockchain and get an handler for the contract
-func GetContract() (*gateway.Contract, error) {
+func GetContract(mspDirectory string, connectionConfigFile string) (*gateway.Contract, error) {
 
 	err := os.Setenv("DISCOVERY_AS_LOCALHOST", "false")
 	if err != nil {
@@ -26,21 +26,14 @@ func GetContract() (*gateway.Contract, error) {
 
 	if !wallet.Exists("appUser") {
 		log.Println("Does")
-		err = PopulateWallet(wallet, "../../crypto-config/peerOrganizations/org.u-hopper.com/users/User1@org.u-hopper.com/msp/", "User1@org.u-hopper.com-cert.pem")
+		err = PopulateWallet(wallet, mspDirectory, "User1@org.u-hopper.com-cert.pem")
 		if err != nil {
 			log.Printf("Failed to populate wallet contents: %v", err)
 			return nil, err
 		}
 	}
 
-	connectionFile := os.Getenv("CONNECTION_FILE")
-
-	if connectionFile == "" {
-		log.Println("using local file")
-		connectionFile = "local-connection-org.yml"
-	}
-
-	ccpPath := filepath.Join(connectionFile)
+	ccpPath := filepath.Join(connectionConfigFile)
 
 	gw, err := gateway.Connect(
 		gateway.WithConfig(config.FromFile(filepath.Clean(ccpPath))),
