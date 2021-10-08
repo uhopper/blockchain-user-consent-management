@@ -66,6 +66,7 @@ func (handler *BlockChainHandler) getConsent(w http.ResponseWriter, r *http.Requ
 
 	consent.ID = userId
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(consent)
 }
 

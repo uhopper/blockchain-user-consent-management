@@ -25,3 +25,6 @@ services:
       basic:
           aliases:
             - tsundoku-ws-${ENV}
+      tsundoku:
+          aliases:
+            - tsundoku-ws-${ENV}
