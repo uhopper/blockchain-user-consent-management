@@ -3,7 +3,7 @@ version: '2'
 networks:
   basic:
     external:
-      name: tsundoku-${ENV}
+      name: tsundoku-blockchain-${ENV}
   tsundoku:
     external: true
 
