@@ -1,3 +1,4 @@
+# Tsundoku blockchan
 
 ## Intialize
 
@@ -6,6 +7,11 @@ Download the binaries and the docker image, type:
 ```
 ./init.sh
 ```
+
+## Configure the environment
+
+In the `docker-compose/template` folder there are three templates. Move these files in the `docker-compose` folder and fill all the values.
+
 
 ## Run the BlockChain
 
@@ -22,7 +28,7 @@ Then start the blockchain:
 ./run.sh
 ```
 
-Wait a couple of minuts in order to allow every node to complite the bootstrap procedure, then configure the network, by typing:
+Wait a couple of minuts in order to allow every node to complete the bootstrap procedure, then configure the network, by typing:
 
 ```
 ./configure.sh
@@ -32,13 +38,31 @@ Wait a couple of minuts in order to allow every node to complite the bootstrap p
 Finaly deploy the chaincode
 
 ```
-./deploy_chaincode.sh -v 0.0.1
+./deploy_chaincode.sh -v 0.0.1 -s 1
 ```
 
 If you edit the chaicode and you want to run the new code use the deploy_chaincode scrip with a new version and a new sequence number:
 
 ```
 ./deploy_chaincode.sh -v 0.0.2 -s 2
+```
+
+Run the webservice
+
+```
+./run_ws
+```
+
+## Note
+
+* If multiple instance of the blockchain are located on the same sarver is suggested to make this explicit in the chaincode deployment command. For example:
+
+```
+./deploy_chaincode.sh -v 0.0.1-prod -s 1
+```
+
+```
+./deploy_chaincode.sh -v 0.0.1-staging -s 1
 ```
 
 ## Stop the blockchain
