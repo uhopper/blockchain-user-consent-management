@@ -1,0 +1,73 @@
+openapi: 3.0.2
+info:
+  title: 'Tsundoku BlockChain'
+  version: 9.1.0
+
+paths:
+
+
+
+  /consent/{userId}:
+    get:
+      description: 'Retrieve the consent of an user'
+      parameters:
+        - in: path
+          name: userId
+          description: The id of the given user.
+          required: true
+          schema:
+            type: string
+            example: 08dcc73f-e92e-4ace-960f-c4b24b0a6b25
+
+      tags:
+        - Consent
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref:  '#/components/schemas/UserConsent'
+          description: 'The consent of the given user'
+          
+  /consent:
+    post:
+      description: 'Update the consent for an user'
+      tags:
+        - Consent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/UserConsent'
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          description: 'The consent has been updated sucesfully'
+
+components:
+
+  schemas:
+  
+    UserConsent: 
+      type: object
+      description: This object rapresent the consent of a user to the processing of personal data
+      properties:
+        ID: 
+          type: string
+          description: the unique id of the user
+        consent:
+          type: boolean
+          description: this attribute is set to true if the user as given the consent, false otherwise
+        privacyPolicyHash: 
+          type: string
+          description: The hash of the privacy policy that the user has been accepted
+        lastUpdate:
+          type: number
+          description: The epoch timestamp of the last time the consent has been updated
+          readOnly: true
+
+
