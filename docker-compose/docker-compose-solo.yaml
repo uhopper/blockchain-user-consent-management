@@ -198,7 +198,7 @@ services:
     command: /bin/bash
     volumes:
         - /var/run:/host/var/run/
-        - ./../chaincode-go/tsundoku_chaincode:/opt/gopath/src/tsundoku_chaincode/
+        - ./../chaincode-go/consent_management_chaincode:/opt/gopath/src/consent_management_chaincode/
         - ./../crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./../crypto-config/peerOrganizations/org.u-hopper.com/users:/etc/hyperledger/msp/users
         - ./../config:/etc/hyperledger/configtx
@@ -230,7 +230,7 @@ services:
     command: /bin/bash
     volumes:
         - /var/run:/host/var/run/docker.sock
-        - ./../chaincode-go/tsundoku_chaincode:/opt/gopath/src/tsundoku_chaincode/
+        - ./../chaincode-go/consent_management_chaincode:/opt/gopath/src/consent_management_chaincode/
         - ./../crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./../config:/etc/hyperledger/configtx
         - ./chiancode_pkg/:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode_pkg

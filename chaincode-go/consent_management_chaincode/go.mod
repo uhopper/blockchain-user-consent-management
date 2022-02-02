@@ -1,4 +1,4 @@
-module tsundoku_chaincode
+module consent_management_chaincode
 
 go 1.14
 

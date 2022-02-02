@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"tsundoku_chaincode/chaincode"
+	"consent_management_chaincode/chaincode"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
