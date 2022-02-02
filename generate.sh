@@ -1,7 +1,7 @@
 #!/bin/sh
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
-CHANNEL_NAME=tsundokchannel
+CHANNEL_NAME=consentmanagementchannel
 
 if [ -d "config/" ]; then
   # Control will enter here if config/* exists.
@@ -36,21 +36,21 @@ if [ "$?" -ne 0 ]; then
 fi
 
 # generate channel configuration transaction
-configtxgen -profile tsundokchannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
+configtxgen -profile consentmanagementchannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
 # generate anchor peer transaction
-configtxgen -profile tsundokchannel -outputAnchorPeersUpdate ./config/UHopperOrgMSPanchors.tx -channelID $CHANNEL_NAME -asOrg UHopperOrgMSP
+configtxgen -profile consentmanagementchannel -outputAnchorPeersUpdate ./config/UHopperOrgMSPanchors.tx -channelID $CHANNEL_NAME -asOrg UHopperOrgMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for Org1MSP..."
   exit 1
 fi
 
 # generate anchor peer transaction
-configtxgen -profile tsundokchannel -outputAnchorPeersUpdate ./config/UHopperOrg1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg UHopperOrg1MSP
+configtxgen -profile consentmanagementchannel -outputAnchorPeersUpdate ./config/UHopperOrg1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg UHopperOrg1MSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for Org2MSP..."
   exit 1

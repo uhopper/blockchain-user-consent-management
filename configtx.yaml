@@ -282,7 +282,7 @@ Profiles:
                 Organizations:
                     - *UHopperOrg
                     - *UHopperOrg1
-    tsundokchannel:
+    consentmanagementchannel:
         <<: *ChannelDefaults
         Consortium: UHopperOrgUHopperOrg1Consortium
         Application:

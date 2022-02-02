@@ -48,5 +48,5 @@ The web service will starts on port `5000`
 ```
 
 ```bash
-  curl --header "Content-Type: application/json"  -H "apikey: your apikey" http://localhost:5000/consent/stefano.tavonatti+test@u-hopper.com
+  curl --header "Content-Type: application/json"  -H "apikey: your apikey" http://localhost:5000/consent/user@example.com
 ```

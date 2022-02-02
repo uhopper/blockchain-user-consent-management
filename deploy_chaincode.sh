@@ -2,8 +2,8 @@
 
 VERSION="0.0.1"
 TSL_ENABLE=false
-CONTRACT_NAME=tsundokuconsent
-CHANNEL_NAME="tsundokchannel"
+CONTRACT_NAME=consentmanagementcontract
+CHANNEL_NAME="consentmanagementchannel"
 SEQUENCE="1"
 
 #loading .env file

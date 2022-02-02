@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CHANNEL_NAME=tsundokchannel
+CHANNEL_NAME=consentmanagementchannel
 
 if [ -f ./docker-compose/.env ]
 then
@@ -41,7 +41,7 @@ sleep 2
 
 echo "join peer2 to the channel"
 
-docker exec -e "CORE_PEER_LOCALMSPID=UHopperOrg1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.u-hopper.com/msp" peer0.org1.u-hopper.com-${ENV} peer channel join -b "tsundokchannel.block"
+docker exec -e "CORE_PEER_LOCALMSPID=UHopperOrg1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.u-hopper.com/msp" peer0.org1.u-hopper.com-${ENV} peer channel join -b "consentmanagementchannel.block"
 
 
 if [ "$?" -ne 0 ]; then

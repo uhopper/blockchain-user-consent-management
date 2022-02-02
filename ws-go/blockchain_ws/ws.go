@@ -1,14 +1,14 @@
 package main
 
 import (
+	"blockchain_ws/model"
+	"blockchain_ws/utils"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
-	"tsundoku_blockchain_ws/model"
-	"tsundoku_blockchain_ws/utils"
 
 	"github.com/gorilla/mux"
 	"github.com/hyperledger/fabric-sdk-go/pkg/gateway"

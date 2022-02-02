@@ -1,2 +1,2 @@
 
-exec /tsundoku_blockchain_ws
+exec /blockchain_ws

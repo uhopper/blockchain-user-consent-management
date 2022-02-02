@@ -1,5 +1,5 @@
 ---
-name: tsundokuconsent
+name: consentmanagementcontract
 version: 1.0.0
 client:
   organization: UHopperOrg
@@ -9,7 +9,7 @@ client:
         endorser: '300'
 
 channels:
-  tsundokchannel:
+  consentmanagementchannel:
     # Required. list of orderers designated by the application to use for transactions on this
     # channel. This list can be a result of access control ("org1" can only access "ordererA"), or
     # operational decisions to share loads from applications among the orderers.  The values must

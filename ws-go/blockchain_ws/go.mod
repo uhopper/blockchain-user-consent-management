@@ -1,4 +1,4 @@
-module tsundoku_blockchain_ws
+module blockchain_ws
 
 go 1.14
 

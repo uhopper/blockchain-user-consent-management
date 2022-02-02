@@ -45,12 +45,12 @@ func GetContract(mspDirectory string, connectionConfigFile string) (*gateway.Con
 	}
 	defer gw.Close()
 
-	network, err := gw.GetNetwork("tsundokchannel")
+	network, err := gw.GetNetwork("consentmanagementchannel")
 	if err != nil {
 		log.Printf("Failed to get network: %v", err)
 		return nil, err
 	}
 
-	contract := network.GetContract("tsundokuconsent")
+	contract := network.GetContract("consentmanagementcontract")
 	return contract, nil
 }
