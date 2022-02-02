@@ -133,3 +133,7 @@ It is possible to shut down the blockchain using the `stop.sh` script. Type:
 ```
 ./clean_all.sh
 ```
+
+----
+
+The content of this repository has been developed in the framework of the "Tsundoku" project financed by the Autonomous Province of Trento according to the province law 13 of December 1999, n. 6 (and subsequent modifications), art. 5. - "Aids for promoting research and development", financing approved with APIAE manager's provision n. 691. The purpose of this project is training a Deep Learning (DL) model capable of detecting the occurrence of a so-called Life Event - a wedding and/or the birth of a child - in a person's life on the basis of the contents she shared on social media (Twitter, in this case). 
